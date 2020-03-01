@@ -915,57 +915,65 @@ const supportsDisplay = function(handlerInput) {
 }
 
 const replayPokemon = function(handlerInput) {
-    return handlerInput.responseBuilder
-            .speak("made it to replay")
-            .reprompt("made it to replay")
-            .getResponse();
-            
-    const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+
     var speakOutput = "";
-    var poke  = {
-        id: sessionAttributes.poke_id,
-        name: sessionAttributes.poke_name,
-        desc: all_pokemon[sessionAttributes.poke_id]['desc']
-    };
+    const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
     
-    var re = new RegExp(poke.name, 'g');
-    speakOutput += poke.desc.replace(re,'This Pokemon')+" Who's that Pokemon?";
-    
-    if (supportsDisplay(handlerInput)){
-    
-        return handlerInput.responseBuilder.addRenderTemplateDirective({
-            "type": "BodyTemplate7",
-            "token": "SampleTemplate_3476",
-            "backButton": "hidden",
-            "title": "Who's That Pokemon?",
-            "backgroundImage": {
-                "contentDescription": "Blue Background",
-                "sources": [
-                    {
-                        "url": "https://mandmstaphouse.com/pokes2/img/bg.png"
-                    }
-                ]
-            },
-            "image": {
-                "contentDescription": "Pokemon Silhouette",
-                "sources": [
-                    {
-                        "url": "https://mttl-tech.s3.amazonaws.com/whos-that-pokemon/images/silhouette/"+poke.id+".png"
-                    }
-                ]
-            }
-        })
-        .speak(speakOutput)
-        .reprompt('Would you like a hint? You can ask for the Pokemon\'s type or to hear its cry.')
-        .getResponse();
-        
+    // if game state is still in configuration mode, we need to re-prompt user to select easy or hard.
+    if (sessionAttributes.game_state === 'configure'){
+        return handlerInput.responseBuilder
+            .speak("Please say easy <break time='150ms'/> or hard <break time='150ms'/> to get started.")
+            .reprompt("Please say easy <break time='150ms'/> or hard <break time='150ms'/> to get started.")
+            .getResponse();
     } else {
         
-        return handlerInput.responseBuilder
-            .speak(speakOutput)
-            .reprompt(speakOutput)
-            .getResponse();
+        // recreate poke 
+        var poke  = {
+            id: sessionAttributes.poke_id,
+            name: sessionAttributes.poke_name,
+            desc: sessionAttributes.poke_desc
+        };
         
+        var re = new RegExp(poke.name, 'g');
+        speakOutput += poke.desc.replace(re,'This Pokemon')+" Who's that Pokemon?";
+        
+        
+        if (supportsDisplay(handlerInput)){
+        
+            return handlerInput.responseBuilder.addRenderTemplateDirective({
+                "type": "BodyTemplate7",
+                "token": "SampleTemplate_3476",
+                "backButton": "hidden",
+                "title": "Who's That Pokemon?",
+                "backgroundImage": {
+                    "contentDescription": "Blue Background",
+                    "sources": [
+                        {
+                            "url": "https://mttl-tech.s3.amazonaws.com/whos-that-pokemon/images/bg.png"
+                        }
+                    ]
+                },
+                "image": {
+                    "contentDescription": "Pokemon Silhouette",
+                    "sources": [
+                        {
+                            "url": "https://mttl-tech.s3.amazonaws.com/whos-that-pokemon/images/silhouette/"+poke.id+".png"
+                        }
+                    ]
+                }
+            })
+            .speak(speakOutput)
+            .reprompt('You can ask for a hint, or say stop to quit.')
+            .getResponse();
+            
+        } else {
+            
+            return handlerInput.responseBuilder
+                .speak(speakOutput)
+                .reprompt(speakOutput)
+                .getResponse();
+            
+        }
     }
 }
 
@@ -998,7 +1006,7 @@ const showCorrectPoke = function(handlerInput, skip_prev)
         // determine if guess is correct
         correct = (pkmn_id === sessionAttributes.poke_id);
         
-        speakOutput = (correct ? '<audio src="https://mttl-tech.s3.amazonaws.com/whos-that-pokemon/audio/m2-victory-vs-trainer.mp3"/> '+pkmn_name+' is Correct!' : '<audio src="https://mandmstaphouse.com/pokes2/m2-Low_Health.mp3"/> '+pkmn_name+' is Incorrect. ' + correct_answer); 
+        speakOutput = (correct ? '<audio src="https://mttl-tech.s3.amazonaws.com/whos-that-pokemon/audio/m2-victory-vs-trainer.mp3"/> '+pkmn_name+' is Correct!' : '<audio src="https://mttl-tech.s3.amazonaws.com/whos-that-pokemon/audio/m2-Low_Health.mp3"/> '+pkmn_name+' is Incorrect. ' + correct_answer); 
         
     }
 
@@ -1016,7 +1024,7 @@ const showCorrectPoke = function(handlerInput, skip_prev)
                 "contentDescription": "Blue Background",
                 "sources": [
                     {
-                        "url": "https://mandmstaphouse.com/pokes2/img/bg-"+(correct? 'yellow' : 'red')+".png"
+                        "url": "https://mttl-tech.s3.amazonaws.com/whos-that-pokemon/images/bg-"+(correct? 'yellow' : 'red')+".png"
                         //"url": "https://mttl-tech.s3.amazonaws.com/whos-that-pokemon/images/bg.png"
                     }
                 ]
@@ -1070,6 +1078,7 @@ const setRandoPoke = function(handlerInput){
     
     sessionAttributes.poke_id = poke.id;
     sessionAttributes.poke_name = poke.name;
+    sessionAttributes.poke_desc = poke.desc;
     sessionAttributes.is_initialized = true;
     handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
     
@@ -1087,7 +1096,7 @@ const setRandoPoke = function(handlerInput){
                 "contentDescription": "Blue Background",
                 "sources": [
                     {
-                        "url": "https://mandmstaphouse.com/pokes2/img/bg-blue.png"
+                        "url": "https://mttl-tech.s3.amazonaws.com/whos-that-pokemon/images/bg-blue.png"
                         //"url": "https://mttl-tech.s3.amazonaws.com/whos-that-pokemon/images/bg.png"
                     }
                 ]
@@ -1150,7 +1159,7 @@ const LaunchRequestHandler = {
                     "contentDescription": "Blue Background",
                     "sources": [
                         {
-                            "url": "https://mandmstaphouse.com/pokes2/img/bg-blue.png"
+                            "url": "https://mttl-tech.s3.amazonaws.com/whos-that-pokemon/images/bg-blue.png"
                             //"url": "https://mttl-tech.s3.amazonaws.com/whos-that-pokemon/images/bg.png"
                         }
                     ]
@@ -1159,7 +1168,7 @@ const LaunchRequestHandler = {
                     "contentDescription": "Welcome!",
                     "sources": [
                         {
-                            "url": "https://mandmstaphouse.com/pokes2/img/welcome-bigger.png"
+                            "url": "https://mttl-tech.s3.amazonaws.com/whos-that-pokemon/images/welcome-bigger.png"
                             //"url": "https://mttl-tech.s3.amazonaws.com/whos-that-pokemon/images/welcome.png"
                         }
                     ]
@@ -1187,11 +1196,7 @@ const RepeatIntentHandler = {
             && Alexa.getIntentName(handlerInput.requestEnvelope) === 'RepeatIntent';
     },
     handle(handlerInput) {
-        return handlerInput.responseBuilder
-                .speak("Repeat pokemon ")
-                .reprompt("Repeat pokemon")
-                .getResponse();
-        //return replayPokemon(handlerInput);
+        return replayPokemon(handlerInput);
         
     }
 };
@@ -1399,7 +1404,7 @@ const IntentReflectorHandler = {
     },
     handle(handlerInput) {
         const intentName = Alexa.getIntentName(handlerInput.requestEnvelope);
-        const speakOutput = "Sorry, I don't recognize that Pokemon. Please try again. <break time='300ms'/> You can ask me to repeat the description <break time='300ms'/>, say skip to move on to the next Pokemon <break time='300ms'/>, or ask for a hint.";
+        const speakOutput = "Sorry, I don't recognize that Pokemon. Please try again. <break time='300ms'/> You can ask me to repeat <break time='300ms'/>, say skip to move on to the next Pokemon <break time='300ms'/>, or ask for a hint.";
 
         return handlerInput.responseBuilder
             .speak(speakOutput)
