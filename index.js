@@ -3,6 +3,8 @@
 // session persistence, api calls, and more.
 const Alexa = require('ask-sdk-core');
 
+const pokemon_types = { "PKMN001":["Grass","Poison"], "PKMN002":["Grass","Poison"], "PKMN003":["Grass","Poison"], "PKMN004":["Fire"], "PKMN005":["Fire"], "PKMN006":["Fire","Flying"], "PKMN007":["Water"], "PKMN008":["Water"], "PKMN009":["Water"], "PKMN010":["Bug"], "PKMN011":["Bug"], "PKMN012":["Bug","Flying"], "PKMN013":["Bug","Poison"], "PKMN014":["Bug","Poison"], "PKMN015":["Bug","Poison"], "PKMN016":["Normal","Flying"], "PKMN017":["Normal","Flying"], "PKMN018":["Normal","Flying"], "PKMN019":["Normal"], "PKMN020":["Normal"], "PKMN021":["Normal","Flying"], "PKMN022":["Normal","Flying"], "PKMN023":["Poison"], "PKMN024":["Poison"], "PKMN025":["Electric"], "PKMN026":["Electric"], "PKMN027":["Ground"], "PKMN028":["Ground"], "PKMN029":["Poison"], "PKMN030":["Poison"], "PKMN031":["Poison","Ground"], "PKMN032":["Poison"], "PKMN033":["Poison"], "PKMN034":["Poison","Ground"], "PKMN035":["Fairy"], "PKMN036":["Fairy"], "PKMN037":["Fire"], "PKMN038":["Fire"], "PKMN039":["Normal","Fairy"], "PKMN040":["Normal","Fairy"], "PKMN041":["Poison","Flying"], "PKMN042":["Poison","Flying"], "PKMN043":["Grass","Poison"], "PKMN044":["Grass","Poison"], "PKMN045":["Grass","Poison"], "PKMN046":["Bug","Grass"], "PKMN047":["Bug","Grass"], "PKMN048":["Bug","Poison"], "PKMN049":["Bug","Poison"], "PKMN050":["Ground"], "PKMN051":["Ground"], "PKMN052":["Normal"], "PKMN053":["Normal"], "PKMN054":["Water"], "PKMN055":["Water"], "PKMN056":["Fighting"], "PKMN057":["Fighting"], "PKMN058":["Fire"], "PKMN059":["Fire"], "PKMN060":["Water"], "PKMN061":["Water"], "PKMN062":["Water","Fighting"], "PKMN063":["Psychic"], "PKMN064":["Psychic"], "PKMN065":["Psychic"], "PKMN066":["Fighting"], "PKMN067":["Fighting"], "PKMN068":["Fighting"], "PKMN069":["Grass","Poison"], "PKMN070":["Grass","Poison"], "PKMN071":["Grass","Poison"], "PKMN072":["Water","Poison"], "PKMN073":["Water","Poison"], "PKMN074":["Rock","Ground"], "PKMN075":["Rock","Ground"], "PKMN076":["Rock","Ground"], "PKMN077":["Fire"], "PKMN078":["Fire"], "PKMN079":["Water","Psychic"], "PKMN080":["Water","Psychic"], "PKMN081":["Electric","Steel"], "PKMN082":["Electric","Steel"], "PKMN083":["Normal","Flying"], "PKMN084":["Normal","Flying"], "PKMN085":["Normal","Flying"], "PKMN086":["Water"], "PKMN087":["Water","Ice"], "PKMN088":["Poison"], "PKMN089":["Poison"], "PKMN090":["Water"], "PKMN091":["Water","Ice"], "PKMN092":["Ghost","Poison"], "PKMN093":["Ghost","Poison"], "PKMN094":["Ghost","Poison"], "PKMN095":["Rock","Ground"], "PKMN096":["Psychic"], "PKMN097":["Psychic"], "PKMN098":["Water"], "PKMN099":["Water"], "PKMN100":["Electric"], "PKMN101":["Electric"], "PKMN102":["Grass","Psychic"], "PKMN103":["Grass","Psychic"], "PKMN104":["Ground"], "PKMN105":["Ground"], "PKMN106":["Fighting"], "PKMN107":["Fighting"], "PKMN108":["Normal"], "PKMN109":["Poison"], "PKMN110":["Poison"], "PKMN111":["Ground","Rock"], "PKMN112":["Ground","Rock"], "PKMN113":["Normal"], "PKMN114":["Grass"], "PKMN115":["Normal"], "PKMN116":["Water"], "PKMN117":["Water"], "PKMN118":["Water"], "PKMN119":["Water"], "PKMN120":["Water"], "PKMN121":["Water","Psychic"], "PKMN122":["Psychic","Fairy"], "PKMN123":["Bug","Flying"], "PKMN124":["Ice","Psychic"], "PKMN125":["Electric"], "PKMN126":["Fire"], "PKMN127":["Bug"], "PKMN128":["Normal"], "PKMN129":["Water"], "PKMN130":["Water","Flying"], "PKMN131":["Water","Ice"], "PKMN132":["Normal"], "PKMN133":["Normal"], "PKMN134":["Water"], "PKMN135":["Electric"], "PKMN136":["Fire"], "PKMN137":["Normal"], "PKMN138":["Rock","Water"], "PKMN139":["Rock","Water"], "PKMN140":["Rock","Water"], "PKMN141":["Rock","Water"], "PKMN142":["Rock","Flying"], "PKMN143":["Normal"], "PKMN144":["Ice","Flying"], "PKMN145":["Electric", "Flying"], "PKMN146":["Fire","Flying"], "PKMN147":["Dragon"], "PKMN148":["Dragon"], "PKMN149":["Dragon","Flying"], "PKMN150":["Psychic"], "PKMN151":["Psychic"], "PKMN152":["Grass"], "PKMN153":["Grass"], "PKMN154":["Grass"], "PKMN155":["Fire"], "PKMN156":["Fire"], "PKMN157":["Fire"], "PKMN158":["Water"], "PKMN159":["Water"], "PKMN160":["Water"], "PKMN161":["Normal"], "PKMN162":["Normal"], "PKMN163":["Normal","Flying"], "PKMN164":["Normal","Flying"], "PKMN165":["Bug","Flying"], "PKMN166":["Bug","Flying"], "PKMN167":["Bug","Poison"], "PKMN168":["Bug","Poison"], "PKMN169":["Poison","Flying"], "PKMN170":["Water","Electric"], "PKMN171":["Water","Electric"], "PKMN172":["Electric"], "PKMN173":["Fairy"], "PKMN174":["Normal","Fairy"], "PKMN175":["Fairy"], "PKMN176":["Fairy","Flying"], "PKMN177":["Psychic","Flying"], "PKMN178":["Psychic","Flying"], "PKMN179":["Electric"], "PKMN180":["Electric"], "PKMN181":["Electric"], "PKMN182":["Grass"], "PKMN183":["Water","Fairy"], "PKMN184":["Water","Fairy"], "PKMN185":["Rock"], "PKMN186":["Water"], "PKMN187":["Grass","Flying"], "PKMN188":["Grass","Flying"], "PKMN189":["Grass","Flying"], "PKMN190":["Normal"], "PKMN191":["Grass"], "PKMN192":["Grass"], "PKMN193":["Bug","Flying"], "PKMN194":["Water","Ground"], "PKMN195":["Water","Ground"], "PKMN196":["Psychic"], "PKMN197":["Dark"], "PKMN198":["Dark","Flying"], "PKMN199":["Water","Psychic"], "PKMN200":["Ghost"], "PKMN201":["Psychic"], "PKMN202":["Psychic"], "PKMN203":["Normal","Psychic"], "PKMN204":["Bug"], "PKMN205":["Bug","Steel"], "PKMN206":["Normal"], "PKMN207":["Ground","Flying"], "PKMN208":["Steel","Ground"], "PKMN209":["Fairy"], "PKMN210":["Fairy"], "PKMN211":["Water","Poison"], "PKMN212":["Bug","Steel"], "PKMN213":["Bug","Rock"], "PKMN214":["Bug","Fighting"], "PKMN215":["Dark","Ice"], "PKMN216":["Normal"], "PKMN217":["Normal"], "PKMN218":["Fire"], "PKMN219":["Fire","Rock"], "PKMN220":["Ice","Ground"], "PKMN221":["Ice","Ground"], "PKMN222":["Water","Rock"], "PKMN223":["Water"], "PKMN224":["Water"], "PKMN225":["Ice","Flying"], "PKMN226":["Water","Flying"], "PKMN227":["Steel","Flying"], "PKMN228":["Dark","Fire"], "PKMN229":["Dark","Fire"], "PKMN230":["Water","Dragon"], "PKMN231":["Ground"], "PKMN232":["Ground"], "PKMN233":["Normal"], "PKMN234":["Normal"], "PKMN235":["Normal"], "PKMN236":["Fighting"], "PKMN237":["Fighting"], "PKMN238":["Ice","Psychic"], "PKMN239":["Electric"], "PKMN240":["Fire"], "PKMN241":["Normal"], "PKMN242":["Normal"], "PKMN243":["Electric"], "PKMN244":["Fire"], "PKMN245":["Water"], "PKMN246":["Rock","Ground"], "PKMN247":["Rock","Ground"], "PKMN248":["Rock","Dark"], "PKMN249":["Psychic","Flying"], "PKMN250":["Fire","Flying"], "PKMN251":["Psychic","Grass"], "PKMN252":["Grass"], "PKMN253":["Grass"], "PKMN254":["Grass"], "PKMN255":["Fire"], "PKMN256":["Fire","Fighting"], "PKMN257":["Fire","Fighting"], "PKMN258":["Water"], "PKMN259":["Water","Ground"], "PKMN260":["Water","Ground"], "PKMN261":["Dark"], "PKMN262":["Dark"], "PKMN263":["Normal"], "PKMN264":["Normal"], "PKMN265":["Bug"], "PKMN266":["Bug"], "PKMN267":["Bug","Flying"], "PKMN268":["Bug"], "PKMN269":["Bug","Poison"], "PKMN270":["Water","Grass"], "PKMN271":["Water","Grass"], "PKMN272":["Water","Grass"], "PKMN273":["Grass"], "PKMN274":["Grass","Dark"], "PKMN275":["Grass","Dark"], "PKMN276":["Normal","Flying"], "PKMN277":["Normal","Flying"], "PKMN278":["Water","Flying"], "PKMN279":["Water","Flying"], "PKMN280":["Psychic","Fairy"], "PKMN281":["Psychic","Fairy"], "PKMN282":["Psychic","Fairy"], "PKMN283":["Bug","Water"], "PKMN284":["Bug","Flying"], "PKMN285":["Grass"], "PKMN286":["Grass","Fighting"], "PKMN287":["Normal"], "PKMN288":["Normal"], "PKMN289":["Normal"], "PKMN290":["Bug","Ground"], "PKMN291":["Bug","Flying"], "PKMN292":["Bug","Ghost"], "PKMN293":["Normal"], "PKMN294":["Normal"], "PKMN295":["Normal"], "PKMN296":["Fighting"], "PKMN297":["Fighting"], "PKMN298":["Normal","Fairy"], "PKMN299":["Rock"], "PKMN300":["Normal"], "PKMN301":["Normal"], "PKMN302":["Dark","Ghost"], "PKMN303":["Steel","Fairy"], "PKMN304":["Steel","Rock"], "PKMN305":["Steel","Rock"], "PKMN306":["Steel","Rock"], "PKMN307":["Fighting","Psychic"], "PKMN308":["Fighting","Psychic"], "PKMN309":["Electric"], "PKMN310":["Electric"], "PKMN311":["Electric"], "PKMN312":["Electric"], "PKMN313":["Bug"], "PKMN314":["Bug"], "PKMN315":["Grass","Poison"], "PKMN316":["Poison"], "PKMN317":["Poison"], "PKMN318":["Water","Dark"], "PKMN319":["Water","Dark"], "PKMN320":["Water"], "PKMN321":["Water"], "PKMN322":["Fire","Ground"], "PKMN323":["Fire","Ground"], "PKMN324":["Fire"], "PKMN325":["Psychic"], "PKMN326":["Psychic"], "PKMN327":["Normal"], "PKMN328":["Ground"], "PKMN329":["Ground","Dragon"], "PKMN330":["Ground","Dragon"], "PKMN331":["Grass"], "PKMN332":["Grass","Dark"], "PKMN333":["Normal","Flying"], "PKMN334":["Dragon","Flying"], "PKMN335":["Normal"], "PKMN336":["Poison"], "PKMN337":["Rock","Psychic"], "PKMN338":["Rock","Psychic"], "PKMN339":["Water","Ground"], "PKMN340":["Water","Ground"], "PKMN341":["Water"], "PKMN342":["Water","Dark"], "PKMN343":["Ground","Psychic"], "PKMN344":["Ground","Psychic"], "PKMN345":["Rock","Grass"], "PKMN346":["Rock","Grass"], "PKMN347":["Rock","Bug"], "PKMN348":["Rock","Bug"], "PKMN349":["Water"], "PKMN350":["Water"], "PKMN351":["Normal"], "PKMN352":["Normal"], "PKMN353":["Ghost"], "PKMN354":["Ghost"], "PKMN355":["Ghost"], "PKMN356":["Ghost"], "PKMN357":["Grass","Flying"], "PKMN358":["Psychic"], "PKMN359":["Dark"], "PKMN360":["Psychic"], "PKMN361":["Ice"], "PKMN362":["Ice"], "PKMN363":["Ice","Water"], "PKMN364":["Ice","Water"], "PKMN365":["Ice","Water"], "PKMN366":["Water"], "PKMN367":["Water"], "PKMN368":["Water"], "PKMN369":["Water","Rock"], "PKMN370":["Water"], "PKMN371":["Dragon"], "PKMN372":["Dragon"], "PKMN373":["Dragon","Flying"], "PKMN374":["Steel","Psychic"], "PKMN375":["Steel","Psychic"], "PKMN376":["Steel","Psychic"], "PKMN377":["Rock"], "PKMN378":["Ice"], "PKMN379":["Steel"], "PKMN380":["Dragon","Psychic"], "PKMN381":["Dragon","Psychic"], "PKMN382":["Water"], "PKMN383":["Ground"], "PKMN384":["Dragon","Flying"], "PKMN385":["Steel","Psychic"], "PKMN386":["Psychic"], "PKMN387":["Grass"], "PKMN388":["Grass"], "PKMN389":["Grass","Ground"], "PKMN390":["Fire"], "PKMN391":["Fire","Fighting"], "PKMN392":["Fire","Fighting"], "PKMN393":["Water"], "PKMN394":["Water"], "PKMN395":["Water","Steel"], "PKMN396":["Normal","Flying"], "PKMN397":["Normal","Flying"], "PKMN398":["Normal","Flying"], "PKMN399":["Normal"], "PKMN400":["Normal","Water"], "PKMN401":["Bug"], "PKMN402":["Bug"], "PKMN403":["Electric"], "PKMN404":["Electric"], "PKMN405":["Electric"], "PKMN406":["Grass","Poison"], "PKMN407":["Grass","Poison"], "PKMN408":["Rock"], "PKMN409":["Rock"], "PKMN410":["Rock","Steel"], "PKMN411":["Rock","Steel"], "PKMN412":["Bug"], "PKMN413":["Bug","Grass"], "PKMN414":["Bug","Flying"], "PKMN415":["Bug","Flying"], "PKMN416":["Bug","Flying"], "PKMN417":["Electric"], "PKMN418":["Water"], "PKMN419":["Water"], "PKMN420":["Grass"], "PKMN421":["Grass"], "PKMN422":["Water"], "PKMN423":["Water","Ground"], "PKMN424":["Normal"], "PKMN425":["Ghost","Flying"], "PKMN426":["Ghost","Flying"], "PKMN427":["Normal"], "PKMN428":["Normal"], "PKMN429":["Ghost"], "PKMN430":["Dark","Flying"], "PKMN431":["Normal"], "PKMN432":["Normal"], "PKMN433":["Psychic"], "PKMN434":["Poison","Dark"], "PKMN435":["Poison","Dark"], "PKMN436":["Steel","Psychic"], "PKMN437":["Steel","Psychic"], "PKMN438":["Rock"], "PKMN439":["Psychic","Fairy"], "PKMN440":["Normal"], "PKMN441":["Normal","Flying"], "PKMN442":["Ghost","Dark"], "PKMN443":["Dragon","Ground"], "PKMN444":["Dragon","Ground"], "PKMN445":["Dragon","Ground"], "PKMN446":["Normal"], "PKMN447":["Fighting"], "PKMN448":["Fighting","Steel"], "PKMN449":["Ground"], "PKMN450":["Ground"], "PKMN451":["Poison","Bug"], "PKMN452":["Poison","Dark"], "PKMN453":["Poison","Fighting"], "PKMN454":["Poison","Fighting"], "PKMN455":["Grass"], "PKMN456":["Water"], "PKMN457":["Water"], "PKMN458":["Water","Flying"], "PKMN459":["Grass","Ice"], "PKMN460":["Grass","Ice"], "PKMN461":["Dark","Ice"], "PKMN462":["Electric","Steel"], "PKMN463":["Normal"], "PKMN464":["Ground","Rock"], "PKMN465":["Grass"], "PKMN466":["Electric"], "PKMN467":["Fire"], "PKMN468":["Fairy","Flying"], "PKMN469":["Bug","Flying"], "PKMN470":["Grass"], "PKMN471":["Ice"], "PKMN472":["Ground","Flying"], "PKMN473":["Ice","Ground"], "PKMN474":["Normal"], "PKMN475":["Psychic","Fighting"], "PKMN476":["Rock","Steel"], "PKMN477":["Ghost"], "PKMN478":["Ice","Ghost"], "PKMN479":["Electric","Ghost"], "PKMN480":["Psychic"], "PKMN481":["Psychic"], "PKMN482":["Psychic"], "PKMN483":["Steel","Dragon"], "PKMN484":["Water","Dragon"], "PKMN485":["Fire","Steel"], "PKMN486":["Normal"], "PKMN487":["Ghost","Dragon"], "PKMN488":["Psychic"], "PKMN489":["Water"], "PKMN490":["Water"], "PKMN491":["Dark"], "PKMN492":["Grass"], "PKMN493":["Normal"], "PKMN494":["Psychic","Fire"], "PKMN495":["Grass"], "PKMN496":["Grass"], "PKMN497":["Grass"], "PKMN498":["Fire"], "PKMN499":["Fire","Fighting"], "PKMN500":["Fire","Fighting"], "PKMN501":["Water"], "PKMN502":["Water"], "PKMN503":["Water"], "PKMN504":["Normal"], "PKMN505":["Normal"], "PKMN506":["Normal"], "PKMN507":["Normal"], "PKMN508":["Normal"], "PKMN509":["Dark"], "PKMN510":["Dark"], "PKMN511":["Grass"], "PKMN512":["Grass"], "PKMN513":["Fire"], "PKMN514":["Fire"], "PKMN515":["Water"], "PKMN516":["Water"], "PKMN517":["Psychic"], "PKMN518":["Psychic"], "PKMN519":["Normal","Flying"], "PKMN520":["Normal","Flying"], "PKMN521":["Normal","Flying"], "PKMN522":["Electric"], "PKMN523":["Electric"], "PKMN524":["Rock"], "PKMN525":["Rock"], "PKMN526":["Rock"], "PKMN527":["Psychic","Flying"], "PKMN528":["Psychic","Flying"], "PKMN529":["Ground"], "PKMN530":["Ground","Steel"], "PKMN531":["Normal"], "PKMN532":["Fighting"], "PKMN533":["Fighting"], "PKMN534":["Fighting"], "PKMN535":["Water"], "PKMN536":["Water","Ground"], "PKMN537":["Water","Ground"], "PKMN538":["Fighting"], "PKMN539":["Fighting"], "PKMN540":["Bug","Grass"], "PKMN541":["Bug","Grass"], "PKMN542":["Bug","Grass"], "PKMN543":["Bug","Poison"], "PKMN544":["Bug","Poison"], "PKMN545":["Bug","Poison"], "PKMN546":["Grass","Fairy"], "PKMN547":["Grass","Fairy"], "PKMN548":["Grass"], "PKMN549":["Grass"], "PKMN550":["Water"], "PKMN551":["Ground","Dark"], "PKMN552":["Ground","Dark"], "PKMN553":["Ground","Dark"], "PKMN554":["Fire"], "PKMN555":["Fire"], "PKMN556":["Grass"], "PKMN557":["Bug","Rock"], "PKMN558":["Bug","Rock"], "PKMN559":["Dark","Fighting"], "PKMN560":["Dark","Fighting"], "PKMN561":["Psychic","Flying"], "PKMN562":["Ghost"], "PKMN563":["Ghost"], "PKMN564":["Water","Rock"], "PKMN565":["Water","Rock"], "PKMN566":["Rock","Flying"], "PKMN567":["Rock","Flying"], "PKMN568":["Poison"], "PKMN569":["Poison"], "PKMN570":["Dark"], "PKMN571":["Dark"], "PKMN572":["Normal"], "PKMN573":["Normal"], "PKMN574":["Psychic"], "PKMN575":["Psychic"], "PKMN576":["Psychic"], "PKMN577":["Psychic"], "PKMN578":["Psychic"], "PKMN579":["Psychic"], "PKMN580":["Water","Flying"], "PKMN581":["Water","Flying"], "PKMN582":["Ice"], "PKMN583":["Ice"], "PKMN584":["Ice"], "PKMN585":["Normal","Grass"], "PKMN586":["Normal","Grass"], "PKMN587":["Electric","Flying"], "PKMN588":["Bug"], "PKMN589":["Bug","Steel"], "PKMN590":["Grass","Poison"], "PKMN591":["Grass","Poison"], "PKMN592":["Water","Ghost"], "PKMN593":["Water","Ghost"], "PKMN594":["Water"], "PKMN595":["Bug","Electric"], "PKMN596":["Bug","Electric"], "PKMN597":["Grass","Steel"], "PKMN598":["Grass","Steel"], "PKMN599":["Steel"], "PKMN600":["Steel"], "PKMN601":["Steel"], "PKMN602":["Electric"], "PKMN603":["Electric"], "PKMN604":["Electric"], "PKMN605":["Psychic"], "PKMN606":["Psychic"], "PKMN607":["Ghost","Fire"], "PKMN608":["Ghost","Fire"], "PKMN609":["Ghost","Fire"], "PKMN610":["Dragon"], "PKMN611":["Dragon"], "PKMN612":["Dragon"], "PKMN613":["Ice"], "PKMN614":["Ice"], "PKMN615":["Ice"], "PKMN616":["Bug"], "PKMN617":["Bug"], "PKMN618":["Ground","Electric"], "PKMN619":["Fighting"], "PKMN620":["Fighting"], "PKMN621":["Dragon"], "PKMN622":["Ground","Ghost"], "PKMN623":["Ground","Ghost"], "PKMN624":["Dark","Steel"], "PKMN625":["Dark","Steel"], "PKMN626":["Normal"], "PKMN627":["Normal","Flying"], "PKMN628":["Normal","Flying"], "PKMN629":["Dark","Flying"], "PKMN630":["Dark","Flying"], "PKMN631":["Fire"], "PKMN632":["Bug","Steel"], "PKMN633":["Dark","Dragon"], "PKMN634":["Dark","Dragon"], "PKMN635":["Dark","Dragon"], "PKMN636":["Bug","Fire"], "PKMN637":["Bug","Fire"], "PKMN638":["Steel","Fighting"], "PKMN639":["Rock","Fighting"], "PKMN640":["Grass","Fighting"], "PKMN641":["Flying"], "PKMN642":["Electric","Flying"], "PKMN643":["Dragon","Fire"], "PKMN644":["Dragon","Electric"], "PKMN645":["Ground","Flying"], "PKMN646":["Dragon","Ice"], "PKMN647":["Water","Fighting"], "PKMN648":["Normal","Psychic"], "PKMN649":["Bug","Steel"], "PKMN650":["Grass"], "PKMN651":["Grass"], "PKMN652":["Grass","Fighting"], "PKMN653":["Fire"], "PKMN654":["Fire"], "PKMN655":["Fire","Psychic"], "PKMN656":["Water"], "PKMN657":["Water"], "PKMN658":["Water","Dark"], "PKMN659":["Normal"], "PKMN660":["Normal","Ground"], "PKMN661":["Normal","Flying"], "PKMN662":["Fire","Flying"], "PKMN663":["Fire","Flying"], "PKMN664":["Bug"], "PKMN665":["Bug"], "PKMN666":["Bug","Flying"], "PKMN667":["Fire","Normal"], "PKMN668":["Fire","Normal"], "PKMN669":["Fairy"], "PKMN670":["Fairy"], "PKMN671":["Fairy"], "PKMN672":["Grass"], "PKMN673":["Grass"], "PKMN674":["Fighting"], "PKMN675":["Fighting","Dark"], "PKMN676":["Normal"], "PKMN677":["Psychic"], "PKMN678":["Psychic"], "PKMN679":["Steel","Ghost"], "PKMN680":["Steel","Ghost"], "PKMN681":["Steel","Ghost"], "PKMN682":["Fairy"], "PKMN683":["Fairy"], "PKMN684":["Fairy"], "PKMN685":["Fairy"], "PKMN686":["Dark","Psychic"], "PKMN687":["Dark","Psychic"], "PKMN688":["Rock","Water"], "PKMN689":["Rock","Water"], "PKMN690":["Poison","Water"], "PKMN691":["Poison","Dragon"], "PKMN692":["Water"], "PKMN693":["Water"], "PKMN694":["Electric","Normal"], "PKMN695":["Electric","Normal"], "PKMN696":["Rock","Dragon"], "PKMN697":["Rock","Dragon"], "PKMN698":["Rock","Ice"], "PKMN699":["Rock","Ice"], "PKMN700":["Fairy"], "PKMN701":["Fighting","Flying"], "PKMN702":["Electric","Fairy"], "PKMN703":["Rock","Fairy"], "PKMN704":["Dragon"], "PKMN705":["Dragon"], "PKMN706":["Dragon"], "PKMN707":["Steel","Fairy"], "PKMN708":["Ghost","Grass"], "PKMN709":["Ghost","Grass"], "PKMN710":["Ghost","Grass"], "PKMN711":["Ghost","Grass"], "PKMN712":["Ice"], "PKMN713":["Ice"], "PKMN714":["Flying","Dragon"], "PKMN715":["Flying","Dragon"], "PKMN716":["Fairy"], "PKMN717":["Dark","Flying"], "PKMN718":["Dragon","Ground"], "PKMN719":["Rock","Fairy"], "PKMN720":["Psychic","Ghost"], "PKMN721":["Fire","Water"], "PKMN722":["Grass","Flying"], "PKMN723":["Grass","Flying"], "PKMN724":["Grass","Ghost"], "PKMN725":["Fire"], "PKMN726":["Fire"], "PKMN727":["Fire","Dark"], "PKMN728":["Water"], "PKMN729":["Water"], "PKMN730":["Water","Fairy"], "PKMN731":["Normal","Flying"], "PKMN732":["Normal","Flying"], "PKMN733":["Normal","Flying"], "PKMN734":["Normal"], "PKMN735":["Normal"], "PKMN736":["Bug"], "PKMN737":["Bug","Electric"], "PKMN738":["Bug","Electric"], "PKMN739":["Fighting"], "PKMN740":["Fighting","Ice"], "PKMN741":["Fire","Flying"], "PKMN742":["Bug","Fairy"], "PKMN743":["Bug","Fairy"], "PKMN744":["Rock"], "PKMN745":["Rock"], "PKMN746":["Water"], "PKMN747":["Poison","Water"], "PKMN748":["Poison","Water"], "PKMN749":["Ground"], "PKMN750":["Ground"], "PKMN751":["Water","Bug"], "PKMN752":["Water","Bug"], "PKMN753":["Grass"], "PKMN754":["Grass"], "PKMN755":["Grass","Fairy"], "PKMN756":["Grass","Fairy"], "PKMN757":["Poison","Fire"], "PKMN758":["Poison","Fire"], "PKMN759":["Normal","Fighting"], "PKMN760":["Normal","Fighting"], "PKMN761":["Grass"], "PKMN762":["Grass"], "PKMN763":["Grass"], "PKMN764":["Fairy"], "PKMN765":["Normal","Psychic"], "PKMN766":["Fighting"], "PKMN767":["Bug","Water"], "PKMN768":["Bug","Water"], "PKMN769":["Ghost","Ground"], "PKMN770":["Ghost","Ground"], "PKMN771":["Water"], "PKMN772":["Normal"], "PKMN773":["Normal"], "PKMN774":["Rock","Flying"], "PKMN775":["Normal"], "PKMN776":["Fire","Dragon"], "PKMN777":["Electric","Steel"], "PKMN778":["Ghost","Fairy"], "PKMN779":["Water","Psychic"], "PKMN780":["Normal","Dragon"], "PKMN781":["Ghost","Grass"], "PKMN782":["Dragon"], "PKMN783":["Dragon","Fighting"], "PKMN784":["Dragon","Fighting"], "PKMN785":["Electric","Fairy"], "PKMN786":["Psychic","Fairy"], "PKMN787":["Grass","Fairy"], "PKMN788":["Water","Fairy"], "PKMN789":["Psychic"], "PKMN790":["Psychic"], "PKMN791":["Psychic","Steel"], "PKMN792":["Psychic","Ghost"], "PKMN793":["Rock","Poison"], "PKMN794":["Bug","Fighting"], "PKMN795":["Bug","Fighting"], "PKMN796":["Electric"], "PKMN797":["Steel","Flying"], "PKMN798":["Grass","Steel"], "PKMN799":["Dark","Dragon"], "PKMN800":["Psychic"], "PKMN801":["Steel","Fairy"], "PKMN802":["Fighting","Ghost"], "PKMN803":["Poison"], "PKMN804":["Poison","Dragon"], "PKMN805":["Rock","Steel"], "PKMN806":["Fire","Ghost"], "PKMN807":["Electric"], "PKMN808":["Steel"], "PKMN809":["Steel"], "PKMN810":["Grass"], "PKMN811":["Grass"], "PKMN812":["Grass"], "PKMN813":["Fire"], "PKMN814":["Fire"], "PKMN815":["Fire"], "PKMN816":["Water"], "PKMN817":["Water"], "PKMN818":["Water"], "PKMN819":["Normal"], "PKMN820":["Normal"], "PKMN821":["Flying"], "PKMN822":["Flying"], "PKMN823":["Flying","Steel"], "PKMN824":["Bug"], "PKMN825":["Bug","Psychic"], "PKMN826":["Bug","Psychic"], "PKMN827":["Dark"], "PKMN828":["Dark"], "PKMN829":["Grass"], "PKMN830":["Grass"], "PKMN831":["Normal"], "PKMN832":["Normal"], "PKMN833":["Water"], "PKMN834":["Water","Rock"], "PKMN835":["Electric"], "PKMN836":["Electric"], "PKMN837":["Rock"], "PKMN838":["Rock","Fire"], "PKMN839":["Rock","Fire"], "PKMN840":["Grass","Dragon"], "PKMN841":["Grass","Dragon"], "PKMN842":["Grass","Dragon"], "PKMN843":["Ground"], "PKMN844":["Ground"], "PKMN845":["Flying","Water"], "PKMN846":["Water"], "PKMN847":["Water"], "PKMN848":["Electric","Poison"], "PKMN849":["Electric","Poison"], "PKMN850":["Fire","Bug"], "PKMN851":["Fire","Bug"], "PKMN852":["Fighting"], "PKMN853":["Fighting"], "PKMN854":["Ghost"], "PKMN855":["Ghost"], "PKMN856":["Psychic"], "PKMN857":["Psychic"], "PKMN858":["Psychic","Fairy"], "PKMN859":["Dark","Fairy"], "PKMN860":["Dark","Fairy"], "PKMN861":["Dark","Fairy"], "PKMN862":["Dark","Normal"], "PKMN863":["Steel"], "PKMN864":["Ghost"], "PKMN865":["Fighting"], "PKMN866":["Ice","Psychic"], "PKMN867":["Ground","Ghost"], "PKMN868":["Fairy"], "PKMN869":["Fairy"], "PKMN870":["Fighting"], "PKMN871":["Electric"], "PKMN872":["Ice","Bug"], "PKMN873":["Ice","Bug"], "PKMN874":["Rock"], "PKMN875":["Ice"], "PKMN876":["Psychic","Normal"], "PKMN877":["Electric","Dark"], "PKMN878":["Steel"], "PKMN879":["Steel"], "PKMN880":["Electric","Dragon"], "PKMN881":["Electric","Ice"], "PKMN882":["Water","Dragon"], "PKMN883":["Water","Ice"], "PKMN884":["Steel","Dragon"], "PKMN885":["Dragon","Ghost"], "PKMN886":["Dragon","Ghost"], "PKMN887":["Dragon","Ghost"], "PKMN888":["Fairy"], "PKMN889":["Fighting"], "PKMN890":["Poison","Dragon"] };
+
 const all_pokemon = [
 	{"id":"001","name":"Bulbasaur","desc":"Bulbasaur can be seen napping in bright sunlight. There is a seed on its back. By soaking up the sun's rays, the seed grows progressively larger."},
 	{"id":"002","name":"Ivysaur","desc":"There is a bud on this Pokemon's back. To support its weight, Ivysaur's legs and trunk grow thick and strong. If it starts spending more time lying in the sunlight, it's a sign that the bud will bloom into a large flower soon."},
@@ -32,10 +34,10 @@ const all_pokemon = [
 	{"id":"026","name":"Raichu","desc":"This Pokemon exudes a weak electrical charge from all over its body that makes it take on a slight glow in darkness. Raichu plants its tail in the ground to discharge electricity."},
 	{"id":"027","name":"Sandshrew","desc":"Sandshrew has a very dry hide that is extremely tough. The Pokemon can roll into a ball that repels any attack. At night, it burrows into the desert sand to sleep."},
 	{"id":"028","name":"Sandslash","desc":"Sandslash can roll up its body as if it were a ball covered with large spikes. In battle, this Pokemon will try to make the foe flinch by jabbing it with its spines. It then leaps at the stunned foe to tear wildly with its sharp claws."},
-	{"id":"029","name":"Nidoran?","desc":"Nidoran-female has barbs that secrete a powerful poison. They are thought to have developed as protection for this small-bodied Pokemon. When enraged, it releases a horrible toxin from its horn."},
+	//{"id":"029","name":"Nidoran","desc":"Nidoran-female has barbs that secrete a powerful poison. They are thought to have developed as protection for this small-bodied Pokemon. When enraged, it releases a horrible toxin from its horn."},
 	{"id":"030","name":"Nidorina","desc":"When Nidorina are with their friends or family, they keep their barbs tucked away to prevent hurting each other. This Pokemon appears to become nervous if separated from the others."},
 	{"id":"031","name":"Nidoqueen","desc":"Nidoqueen's body is encased in extremely hard scales. It is adept at sending foes flying with harsh tackles. This Pokemon is at its strongest when it is defending its young."},
-	{"id":"032","name":"Nidoran?","desc":"Nidoran-male has developed muscles for moving its ears. Thanks to them, the ears can be freely moved in any direction. Even the slightest sound does not escape this Pokemon's notice."},
+	//{"id":"032","name":"Nidoran","desc":"Nidoran-male has developed muscles for moving its ears. Thanks to them, the ears can be freely moved in any direction. Even the slightest sound does not escape this Pokemon's notice."},
 	{"id":"033","name":"Nidorino","desc":"Nidorino has a horn that is harder than a diamond. If it senses a hostile presence, all the barbs on its back bristle up at once, and it challenges the foe with all its might."},
 	{"id":"034","name":"Nidoking","desc":"Nidoking's thick tail packs enormously destructive power. With one swing, it can topple a metal transmission tower. Once this Pokemon goes on a rampage, there is no stopping it."},
 	{"id":"035","name":"Clefairy","desc":"On every night of a full moon, groups of this Pokemon come out to play. When dawn arrives, the tired Clefairy return to their quiet mountain retreats and go to sleep nestled up against each other."},
@@ -908,11 +910,16 @@ const supportsDisplay = function(handlerInput) {
     handlerInput.requestEnvelope.context.System.device.supportedInterfaces &&
     handlerInput.requestEnvelope.context.System.device.supportedInterfaces.Display
 
-  console.log("Supported Interfaces are" + JSON.stringify(handlerInput.requestEnvelope.context.System.device.supportedInterfaces));
+  //console.log("Supported Interfaces are" + JSON.stringify(handlerInput.requestEnvelope.context.System.device.supportedInterfaces));
   return hasDisplay;
 }
 
 const replayPokemon = function(handlerInput) {
+    return handlerInput.responseBuilder
+            .speak("made it to replay")
+            .reprompt("made it to replay")
+            .getResponse();
+            
     const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
     var speakOutput = "";
     var poke  = {
@@ -962,6 +969,82 @@ const replayPokemon = function(handlerInput) {
     }
 }
 
+const showCorrectPoke = function(handlerInput, skip_prev)
+{
+    
+    skip_prev = (typeof skip_prev !== 'undefined') ?  skip_prev : false;
+
+    const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+
+    /*
+    // if we are still in the configure game state, then lets just assume they selected hard and continue 
+    if (sessionAttributes.game_state === 'configure'){
+        return EasyHardIntentHandler(handlerInput);
+    }
+    */
+    
+    var correct = false;
+    const correct_answer = 'The correct answer was '+sessionAttributes.poke_name+'.';
+    const guess_again = "<break time='300ms'/> Would you like to guess another Pokemon?";
+    var speakOutput = correct_answer;
+    
+    if ( ! skip_prev){
+        
+        const pokemon   = handlerInput.requestEnvelope.request.intent.slots.pokemon;
+        const pkmn_val  = pokemon.resolutions.resolutionsPerAuthority[0].values[0].value;
+        const pkmn_id   = pkmn_val.id.replace('PKMN_','');
+        const pkmn_name = pkmn_val.name;
+        
+        // determine if guess is correct
+        correct = (pkmn_id === sessionAttributes.poke_id);
+        
+        speakOutput = (correct ? '<audio src="https://mttl-tech.s3.amazonaws.com/whos-that-pokemon/audio/m2-victory-vs-trainer.mp3"/> '+pkmn_name+' is Correct!' : '<audio src="https://mandmstaphouse.com/pokes2/m2-Low_Health.mp3"/> '+pkmn_name+' is Incorrect. ' + correct_answer); 
+        
+    }
+
+    
+    speakOutput += guess_again;
+    
+    if (supportsDisplay(handlerInput)){
+    
+        return handlerInput.responseBuilder.addRenderTemplateDirective({
+            "type": "BodyTemplate7",
+            "token": "SampleTemplate_3476",
+            "backButton": "hidden",
+            "title": "Who's That Pokemon?",
+                "backgroundImage": {
+                "contentDescription": "Blue Background",
+                "sources": [
+                    {
+                        "url": "https://mandmstaphouse.com/pokes2/img/bg-"+(correct? 'yellow' : 'red')+".png"
+                        //"url": "https://mttl-tech.s3.amazonaws.com/whos-that-pokemon/images/bg.png"
+                    }
+                ]
+            },
+            "image": {
+                "contentDescription": "Pokemon Silhouette",
+                "sources": [
+                    {
+                        "url": "https://mttl-tech.s3.amazonaws.com/whos-that-pokemon/images/actual/"+sessionAttributes.poke_id+".png"
+                    }
+                ]
+            }
+        })
+        .speak(speakOutput)
+        .reprompt(correct_answer + " " + guess_again)
+        .getResponse();
+        
+    } else {
+    
+        return handlerInput.responseBuilder
+            .speak(speakOutput)
+            .reprompt(correct_answer + " " + guess_again)
+            .getResponse();
+        
+    }
+    
+}
+
 const setRandoPoke = function(handlerInput){
     
     const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
@@ -969,22 +1052,25 @@ const setRandoPoke = function(handlerInput){
     var current_pokes = all_pokemon;
     
     if (sessionAttributes.game_mode === 'easy'){
-        current_pokes = current_pokes.slice(0,151);
+        current_pokes = current_pokes.slice(0,149); // lowering this -2 until Nidoran is fixed
     }
+    
     var speakOutput = "";
     var poke = current_pokes[Math.floor(Math.random() * current_pokes.length)];
     
     // no poke_id means the game just started - this is the first randoPoke
-    if ( ! sessionAttributes.poke_id){
-        if (sessionAttributes.game_mode === 'easy'){
-            speakOutput += "Great, you've selected easy mode <break time='300ms'/> which will include the " + current_pokes.length + " original Pokemon characters. <break time='300ms'/> Let's get started. <break time='1s'/>";
-        } else {
-            speakOutput += "Great, you've selected hard mode <break time='300ms'/> which will include the " + all_pokemon.length + " Pokemon characters. <break time='300ms'/> Let's get started. <break time='1s'/>";
-        }    
+    if ( ! sessionAttributes.is_initialized){
+        
+        var prefix = (sessionAttributes.game_mode === 'easy' ? 'the ' : '');
+        var suffix = (sessionAttributes.game_mode === 'easy' ? ' original' : '');
+        
+        speakOutput = "Great, you've selected "+sessionAttributes.game_mode+" mode <break time='300ms'/> which will include " + prefix + (current_pokes.length + 2) + suffix + " Pokemon. <break time='300ms'/> Let's get started. <break time='1s'/>";
+        
     }
     
     sessionAttributes.poke_id = poke.id;
     sessionAttributes.poke_name = poke.name;
+    sessionAttributes.is_initialized = true;
     handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
     
     var re = new RegExp(poke.name, 'g');
@@ -1001,7 +1087,8 @@ const setRandoPoke = function(handlerInput){
                 "contentDescription": "Blue Background",
                 "sources": [
                     {
-                        "url": "https://mttl-tech.s3.amazonaws.com/whos-that-pokemon/images/bg.png"
+                        "url": "https://mandmstaphouse.com/pokes2/img/bg-blue.png"
+                        //"url": "https://mttl-tech.s3.amazonaws.com/whos-that-pokemon/images/bg.png"
                     }
                 ]
             },
@@ -1015,7 +1102,7 @@ const setRandoPoke = function(handlerInput){
             }
         })
         .speak(speakOutput)
-        .reprompt('Would you like a hint? You can ask for the Pokemon\'s type or to hear its cry.')
+        .reprompt('Would you like a hint? You can ask for the Pokemon\'s type or to hear what it sounds like.')
         .getResponse();
         
     } else {
@@ -1045,6 +1132,10 @@ const LaunchRequestHandler = {
         sessionAttributes.game_state = 'configure';
         handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
         
+        sessionAttributes.poke_id = "001";
+        sessionAttributes.poke_name = "Bulbasaur";
+        sessionAttributes.is_initialized = false;
+        
         var speakOutput = "<audio src='https://mttl-tech.s3.amazonaws.com/whos-that-pokemon/audio/m2-opening-theme.mp3'/> <break time='0.5s'/> Welcome to the World of Pokemon. <break time='300ms'/> I'm Professor Alexa. <break time='300ms'/>";
         speakOutput += "Please say easy <break time='150ms'/> or hard <break time='150ms'/> to get started.";   // I wanted to keep this simple and straight to the point 
         
@@ -1059,7 +1150,8 @@ const LaunchRequestHandler = {
                     "contentDescription": "Blue Background",
                     "sources": [
                         {
-                            "url": "https://mttl-tech.s3.amazonaws.com/whos-that-pokemon/images/bg.png"
+                            "url": "https://mandmstaphouse.com/pokes2/img/bg-blue.png"
+                            //"url": "https://mttl-tech.s3.amazonaws.com/whos-that-pokemon/images/bg.png"
                         }
                     ]
                 },
@@ -1067,7 +1159,8 @@ const LaunchRequestHandler = {
                     "contentDescription": "Welcome!",
                     "sources": [
                         {
-                            "url": "https://mttl-tech.s3.amazonaws.com/whos-that-pokemon/images/welcome.png"
+                            "url": "https://mandmstaphouse.com/pokes2/img/welcome-bigger.png"
+                            //"url": "https://mttl-tech.s3.amazonaws.com/whos-that-pokemon/images/welcome.png"
                         }
                     ]
                 }
@@ -1116,6 +1209,21 @@ const StartIntentHandler = {
     }
 };
 
+const DunnoIntentHandler = {
+    canHandle(handlerInput) {
+        return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
+            && (Alexa.getIntentName(handlerInput.requestEnvelope) === 'DunnoIntent');
+    },
+    handle(handlerInput) {
+        
+        // read off answer to last shown pokemon - then show next pokemon 
+        
+        //return setRandoPoke(handlerInput);
+        
+        return showCorrectPoke(handlerInput, true);
+    }
+};
+
 const SkipIntentHandler = {
     canHandle(handlerInput) {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
@@ -1123,6 +1231,8 @@ const SkipIntentHandler = {
             || Alexa.getIntentName(handlerInput.requestEnvelope) === 'AMAZON.NextIntent');
     },
     handle(handlerInput) {
+        
+        // read off answer to last shown pokemon - then show next pokemon 
         
         return setRandoPoke(handlerInput);
         
@@ -1178,9 +1288,12 @@ const HintIntentHandler = {
     handle(handlerInput) {
         
         var hint = handlerInput.requestEnvelope.request.intent.slots.hints.resolutions.resolutionsPerAuthority[0].values[0].value.name;
-        var speakOutput = 'This is where we will give the type.';
         
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        
+        var typekey = 'PKMN'+sessionAttributes.poke_id;
+        
+        var speakOutput = 'This Pokemon is '+pokemon_types[typekey].join(' ')+' type. Who\'s that Pokemon?';
         
         if (hint !== 'cry' && hint !== 'type'){
             
@@ -1194,7 +1307,7 @@ const HintIntentHandler = {
         
         return handlerInput.responseBuilder
             .speak(speakOutput)
-            .reprompt(speakOutput)
+            .reprompt("You can ask for another hint<break time='300ms'/>, say `Pokedex` to hear its description, <break time='300ms'/> or skip to move on to the next Pokemon.")
             .getResponse();
     }
 };
@@ -1211,10 +1324,11 @@ const YesNoIntentHandler = {
         
         if (yn === 'no'){
             
-            const speakOutput = 'Thank you for playing!  If you enjoyed our skill, please give it a 5 star rating.';
+            const speakOutput = "Please say `stop` to quit playing <break time='300ms'/> or say `next` to move on to the next Pokemon.";
             return handlerInput.responseBuilder
-                .withShouldEndSession(true)
+                //.withShouldEndSession(true)
                 .speak(speakOutput)
+                .reprompt(speakOutput)
                 .getResponse();
             
         }
@@ -1231,65 +1345,7 @@ const PokemonIntentHandler = {
     },
     handle(handlerInput) {
         
-        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
-
-        /*
-        // if we are still in the configure game state, then lets just assume they selected hard and continue 
-        if (sessionAttributes.game_state === 'configure'){
-            return EasyHardIntentHandler(handlerInput);
-        }
-        */
-        
-        const pokemon   = handlerInput.requestEnvelope.request.intent.slots.pokemon;
-        const pkmn_val  = pokemon.resolutions.resolutionsPerAuthority[0].values[0].value;
-        const pkmn_id   = pkmn_val.id.replace('PKMN_','');
-        const pkmn_name = pkmn_val.name;
-        
-        // determine if guess is correct
-        const correct = (pkmn_id === sessionAttributes.poke_id);
-    
-        
-        var speakOutput = (correct ? '<audio src="https://mttl-tech.s3.amazonaws.com/whos-that-pokemon/audio/m2-victory-vs-trainer.mp3"/> '+pkmn_name+' is Correct!' : '<audio src="https://mandmstaphouse.com/pokes2/m2-Low_Health.mp3"/> '+pkmn_name+' is Incorrect. The correct answer was '+sessionAttributes.poke_name+'.'); 
-
-        speakOutput += "<break time='300ms'/> Would you like to guess another Pokemon?";
-        
-        if (supportsDisplay(handlerInput)){
-        
-            return handlerInput.responseBuilder.addRenderTemplateDirective({
-                "type": "BodyTemplate7",
-                "token": "SampleTemplate_3476",
-                "backButton": "hidden",
-                "title": "Who's That Pokemon?",
-                    "backgroundImage": {
-                    "contentDescription": "Blue Background",
-                    "sources": [
-                        {
-                            "url": "https://mttl-tech.s3.amazonaws.com/whos-that-pokemon/images/bg.png"
-                        }
-                    ]
-                },
-                "image": {
-                    "contentDescription": "Pokemon Silhouette",
-                    "sources": [
-                        {
-                            "url": "https://mttl-tech.s3.amazonaws.com/whos-that-pokemon/images/actual/"+sessionAttributes.poke_id+".png"
-                        }
-                    ]
-                }
-            })
-            .speak(speakOutput)
-            .reprompt(speakOutput)
-            .getResponse();
-            
-        } else {
-        
-            return handlerInput.responseBuilder
-                .speak(speakOutput)
-                .reprompt(speakOutput)
-                .getResponse();
-            
-        }
-            
+        return showCorrectPoke(handlerInput);
             
     }
 };
@@ -1343,11 +1399,11 @@ const IntentReflectorHandler = {
     },
     handle(handlerInput) {
         const intentName = Alexa.getIntentName(handlerInput.requestEnvelope);
-        const speakOutput = `You just triggered ${intentName}`;
+        const speakOutput = "Sorry, I don't recognize that Pokemon. Please try again. <break time='300ms'/> You can ask me to repeat the description <break time='300ms'/>, say skip to move on to the next Pokemon <break time='300ms'/>, or ask for a hint.";
 
         return handlerInput.responseBuilder
             .speak(speakOutput)
-            //.reprompt('add a reprompt if you want to keep the session open for the user to respond')
+            .reprompt(speakOutput)
             .getResponse();
     }
 };
@@ -1361,7 +1417,9 @@ const ErrorHandler = {
     },
     handle(handlerInput, error) {
         console.log(`~~~~ Error handled: ${error.stack}`);
-        const speakOutput = `Sorry, I had trouble doing what you asked. Please try again.`;
+        //const speakOutput = `Sorry, I had trouble doing what you asked. Please try again.`;
+        
+        const speakOutput = "Sorry, I don't recognize that Pokemon. Please try again. <break time='300ms'/> You can ask me to repeat the description <break time='300ms'/>, say skip to move on to the next Pokemon <break time='300ms'/>, or ask for a hint.";
 
         return handlerInput.responseBuilder
             .speak(speakOutput)
@@ -1379,9 +1437,10 @@ exports.handler = Alexa.SkillBuilders.custom()
         StartIntentHandler,
         YesNoIntentHandler,
         PokemonIntentHandler,
-        SkipIntentHandler,
         HintIntentHandler,
         EasyHardIntentHandler,
+        DunnoIntentHandler,
+        SkipIntentHandler,
         RepeatIntentHandler,
         //HelloWorldIntentHandler,
         HelpIntentHandler,
