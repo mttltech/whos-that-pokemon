@@ -1424,7 +1424,7 @@ const ErrorHandler = {
         console.log(`~~~~ Error handled: ${error.stack}`);
         //const speakOutput = `Sorry, I had trouble doing what you asked. Please try again.`;
         
-        const speakOutput = "Sorry, I don't recognize that Pokemon. Please try again. <break time='300ms'/> You can ask me to repeat the description <break time='300ms'/>, say skip to move on to the next Pokemon <break time='300ms'/>, or ask for a hint.";
+        const speakOutput = "Sorry, I don't recognize that Pokemon. Please try again. <break time='300ms'/> You can ask me to repeat <break time='300ms'/>, say skip to move on to the next Pokemon <break time='300ms'/>, or ask for a hint.";
 
         return handlerInput.responseBuilder
             .speak(speakOutput)
