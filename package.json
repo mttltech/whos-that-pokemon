@@ -1,0 +1,31 @@
+{
+  "name": "whos-that-pokemon",
+  "version": "2.6.0",
+  "description": "Who's That Pokemon - Unofficial Guessing Game",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mttltech/whos-that-pokemon.git"
+  },
+  "keywords": [
+    "Alexa",
+    "game",
+    "skill",
+    "pokemon"
+  ],
+  "author": "Amazon.com",
+  "license": "Amazon Software License",
+  "bugs": {
+    //"url": "https://github.com/alexa/skill-sample-nodejs-highlowgame/issues"
+  },
+  //"homepage": "https://github.com/alexa/skill-sample-nodejs-highlowgame#readme",
+  "dependencies": {
+    "ask-sdk": "^2.6.0",
+    "ask-sdk-s3-persistence-adapter": "^2.6.0",
+    "i18next": "^10.5.0",
+    "i18next-sprintf-postprocessor": "^0.2.2"
+  }
+}
