@@ -949,7 +949,7 @@ const replayPokemon = function(handlerInput) {
                     "contentDescription": "Blue Background",
                     "sources": [
                         {
-                            "url": "https://mttl-tech.s3.amazonaws.com/whos-that-pokemon/images/bg.png"
+                            "url": "https://mttl-tech.s3.amazonaws.com/whos-that-pokemon/images/bg-blue.png"
                         }
                     ]
                 },
@@ -963,7 +963,7 @@ const replayPokemon = function(handlerInput) {
                 }
             })
             .speak(speakOutput)
-            .reprompt('You can ask for a hint, or say stop to quit.')
+            .reprompt("You can say repeat, <break time='300ms'/>ask for a hint, <break time='300ms'/> or say stop to quit.")
             .getResponse();
             
         } else {
@@ -1063,8 +1063,30 @@ const setRandoPoke = function(handlerInput){
         current_pokes = current_pokes.slice(0,149); // lowering this -2 until Nidoran is fixed
     }
     
+    var pool = current_pokes;
+    var prev_pokes = sessionAttributes.prev_pokes;
+    
+    if(prev_pokes && prev_pokes.length && prev_pokes.length < current_pokes.length){
+        
+        for(var pp in sessionAttributes.prev_pokes){
+            
+            for (var i=0; i < pool.length; i++) {
+                
+                if (pool[i].id === sessionAttributes.prev_pokes[pp]) {
+                    
+                    pool.splice(i,1);
+                    
+                }
+            }
+            
+        }
+        
+    }
+    
+    
+    
     var speakOutput = "";
-    var poke = current_pokes[Math.floor(Math.random() * current_pokes.length)];
+    var poke = pool[Math.floor(Math.random() * pool.length)];
     
     // no poke_id means the game just started - this is the first randoPoke
     if ( ! sessionAttributes.is_initialized){
@@ -1076,10 +1098,20 @@ const setRandoPoke = function(handlerInput){
         
     }
     
+    
+    prev_pokes.push(poke.id);
+    
+    if (prev_pokes.length >= current_pokes.length){
+        prev_pokes = [];    
+    }
+
     sessionAttributes.poke_id = poke.id;
     sessionAttributes.poke_name = poke.name;
     sessionAttributes.poke_desc = poke.desc;
     sessionAttributes.is_initialized = true;
+    
+    sessionAttributes.prev_pokes = prev_pokes;
+
     handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
     
     var re = new RegExp(poke.name, 'g');
@@ -1139,13 +1171,16 @@ const LaunchRequestHandler = {
         // this is important, for example: if we launch the intro music but a user automatically says a Pokemon name 
             // we can now add checks to setRandoPoke (and other Intents) to ensure the users is in the proper game_state before continuing
         sessionAttributes.game_state = 'configure';
-        handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
         
         sessionAttributes.poke_id = "001";
         sessionAttributes.poke_name = "Bulbasaur";
         sessionAttributes.is_initialized = false;
+        sessionAttributes.game_mode = "easy";
+        sessionAttributes.prev_pokes = [];
         
-        var speakOutput = "<audio src='https://mttl-tech.s3.amazonaws.com/whos-that-pokemon/audio/m2-opening-theme.mp3'/> <break time='0.5s'/> Welcome to the World of Pokemon. <break time='300ms'/> I'm Professor Alexa. <break time='300ms'/>";
+        handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+        
+        var speakOutput = "<audio src='https://mttl-tech.s3.amazonaws.com/whos-that-pokemon/audio/m2-opening-theme.mp3'/> <break time='0.5s'/> Welcome to the World of Pokemon. <break time='300ms'/>";
         speakOutput += "Please say easy <break time='150ms'/> or hard <break time='150ms'/> to get started.";   // I wanted to keep this simple and straight to the point 
         
         if (supportsDisplay(handlerInput)){
@@ -1257,14 +1292,12 @@ const EasyHardIntentHandler = {
         const eh = handlerInput.requestEnvelope.request.intent.slots.easyhard.resolutions.resolutionsPerAuthority[0].values[0].value.name;
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
         
-        /*
         // if game state is already 'playing', then the user shouldn't be saying easy or hard 
         // let's replay last poke 
         if (sessionAttributes.game_state === 'playing'){
             return replayPokemon(handlerInput);
         }
-        */
-        
+
         // update game_state 
         sessionAttributes.game_state = 'playing';
         
@@ -1377,7 +1410,7 @@ const CancelAndStopIntentHandler = {
                 || Alexa.getIntentName(handlerInput.requestEnvelope) === 'AMAZON.StopIntent');
     },
     handle(handlerInput) {
-        const speakOutput = 'Thank you for playing!  If you enjoyed our skill, please give it a 5 star rating.';
+        const speakOutput = 'Thank you for playing!  If you enjoyed our skill, please rate us in the skill store.';
         return handlerInput.responseBuilder
             .withShouldEndSession(true)
             .speak(speakOutput)
@@ -1404,7 +1437,7 @@ const IntentReflectorHandler = {
     },
     handle(handlerInput) {
         const intentName = Alexa.getIntentName(handlerInput.requestEnvelope);
-        const speakOutput = "Sorry, I don't recognize that Pokemon. Please try again. <break time='300ms'/> You can ask me to repeat <break time='300ms'/>, say skip to move on to the next Pokemon <break time='300ms'/>, or ask for a hint.";
+        const speakOutput = "Sorry, I don't recognize that Pokemon. Please try again. <break time='300ms'/> You can say skip <break time='300ms'/>, repeat <break time='300ms'/>, or ask for a hint.";
 
         return handlerInput.responseBuilder
             .speak(speakOutput)
@@ -1424,7 +1457,7 @@ const ErrorHandler = {
         console.log(`~~~~ Error handled: ${error.stack}`);
         //const speakOutput = `Sorry, I had trouble doing what you asked. Please try again.`;
         
-        const speakOutput = "Sorry, I don't recognize that Pokemon. Please try again. <break time='300ms'/> You can ask me to repeat <break time='300ms'/>, say skip to move on to the next Pokemon <break time='300ms'/>, or ask for a hint.";
+        const speakOutput = "Sorry, I don't recognize that Pokemon. Please try again. <break time='300ms'/> You can say skip <break time='300ms'/>, repeat <break time='300ms'/>, or ask for a hint.";
 
         return handlerInput.responseBuilder
             .speak(speakOutput)
